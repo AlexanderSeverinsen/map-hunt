@@ -21,6 +21,9 @@ library(tidyverse)
 # could use tcx files to get height, altitude and heartrate
 gpx_data <- st_read("gpx_tracks/activity_12155932496_gamnes_nord.gpx", layer="tracks") 
 gpx_data2 <- st_read("gpx_tracks/activity_12164935216_soltinddalen.gpx", layer="tracks") 
+gpx_data3  <- st_read("gpx_tracks/activity_12152120927_gamnes_sør2.gpx", layer="tracks") 
+gpx_data4  <- st_read("gpx_tracks/activity_12152120927_gamnes_sør.gpx", layer="tracks") 
+gpx_data5  <- st_read("gpx_tracks/activity_12172841314_grunnfjord_vest.gpx", layer="tracks") 
 ```
 
 ```{r}
@@ -43,7 +46,10 @@ map <- leaflet() %>%
     options = layersControlOptions(collapsed = FALSE)
   ) |>
   addPolylines(data = gpx_data, color = "blue", weight = 3) %>%
-  addPolylines(data = gpx_data2, color = "blue", weight = 3) 
+  addPolylines(data = gpx_data2, color = "blue", weight = 3) %>%
+  addPolylines(data = gpx_data3, color = "blue", weight = 3) %>%
+  addPolylines(data = gpx_data4, color = "blue", weight = 3) %>%
+  addPolylines(data = gpx_data5, color = "blue", weight = 3) 
 map
 ```
 
