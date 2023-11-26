@@ -18,6 +18,7 @@ library(XML)
 library(dplyr)
 library(xml2)
 library(tidyverse)
+library(leaflet.extras)
 
 # Exported GPX files from Garmin connect
 # could use tcx files to get height, altitude and heartrate
@@ -72,9 +73,14 @@ map <- leaflet() %>%
     baseGroups = c("Satellite", "Topo Map"),
     overlayGroups = c("Gamnes Nord", "Soltinddalen", "Gamnes Sør 1", "Gamnes Sør 2", "Grunnfjord Vest"),
     options = layersControlOptions(collapsed = FALSE)
-  )
+  ) %>%  addControlGPS(
+    options = gpsOptions(
+      position = "topleft",
+      activate = TRUE, 
+      autoCenter = TRUE,
+      setView = TRUE))
 
-map
+activateGPS(map)
 
 ```
 
