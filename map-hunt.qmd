@@ -1,0 +1,50 @@
+---
+title: "Jakt på Ringvassøya"
+format: html
+---
+
+
+```{r}
+#| echo: false
+#| message: true
+#| warning: false
+#| output: false
+
+library(sf)
+library(leaflet)
+library(XML)
+library(dplyr)
+library(xml2)
+library(tidyverse)
+
+# Exported GPX files from Garmin connect
+# could use tcx files to get height, altitude and heartrate
+gpx_data <- st_read("gpx_tracks/activity_12155932496_gamnes_nord.gpx", layer="tracks") 
+gpx_data2 <- st_read("gpx_tracks/activity_12164935216_soltinddalen.gpx", layer="tracks") 
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+# GeoNorge Web mapping service
+# Topographic raster 1:50000 - 1:10M
+map <- leaflet() %>%
+  addProviderTiles("Esri.WorldImagery", group = "Satellite") |>
+  addWMSTiles(
+    baseUrl = "https://wms.geonorge.no/skwms1/wms.topo4?",
+    layers = "topo4_WMS",
+    options = WMSTileOptions(format = "image/png", transparent = TRUE),
+    group = "Topo Map"
+  ) |>
+  addLayersControl(
+    baseGroups = c("Satellite", "Topo Map"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) |>
+  addPolylines(data = gpx_data, color = "blue", weight = 3) %>%
+  addPolylines(data = gpx_data2, color = "blue", weight = 3) 
+map
+```
+
+
