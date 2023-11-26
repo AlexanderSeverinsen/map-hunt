@@ -1,6 +1,8 @@
 ---
-title: "Jakt på Ringvassøya"
-format: html
+title: "Rypejakt på Ringvassøya"
+format: 
+  html:
+    page-layout: full
 ---
 
 
@@ -24,33 +26,58 @@ gpx_data2 <- st_read("gpx_tracks/activity_12164935216_soltinddalen.gpx", layer="
 gpx_data3  <- st_read("gpx_tracks/activity_12152120927_gamnes_sør2.gpx", layer="tracks") 
 gpx_data4  <- st_read("gpx_tracks/activity_12152120927_gamnes_sør.gpx", layer="tracks") 
 gpx_data5  <- st_read("gpx_tracks/activity_12172841314_grunnfjord_vest.gpx", layer="tracks") 
+
 ```
+
+
+
 
 ```{r}
 #| echo: false
 #| message: false
 #| warning: false
 
-# GeoNorge Web mapping service
-# Topographic raster 1:50000 - 1:10M
+urls <- list(
+  "Gamnes Nord" = "https://www.inatur.no/jakt/59af9dc3e4b0c4fbe7555916/smaviltjakt-gamnes-nord-gamnes-utmarkslag",
+  "Soltinddalen" = "https://www.inatur.no/jakt/50e69655e4b00eacb08fd0b6/smaviltjakt-i-soltinddalen-pa-ringvassoy",
+  "Gamnes Sør 1" = "https://www.inatur.no/jakt/50f45fa3e4b0e07d03ec3731/smaviltjakt-gamnes-sor-gamnes-utmarkslag",
+  "Gamnes Sør 2" = "https://www.inatur.no/jakt/50f45fa3e4b0e07d03ec3731/smaviltjakt-gamnes-sor-gamnes-utmarkslag",
+  "Grunnfjord Vest" = "https://www.inatur.no/jakt/5b86fb78524e7900037a8dfc/smaviltjakt-i-grunnfjord-nord-pa-ringvassoya"
+)
+
 map <- leaflet() %>%
-  addProviderTiles("Esri.WorldImagery", group = "Satellite") |>
+  addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%
   addWMSTiles(
     baseUrl = "https://wms.geonorge.no/skwms1/wms.topo4?",
     layers = "topo4_WMS",
     options = WMSTileOptions(format = "image/png", transparent = TRUE),
     group = "Topo Map"
-  ) |>
+  ) %>%
+  addPolylines(data = gpx_data, color = "red", weight = 3, 
+               group = "Gamnes Nord", 
+               popup = ~paste0('<a href="', urls[["Gamnes Nord"]], '" target="_blank">Kjøp kart på inatur.no</a>')) %>%
+  addPolylines(data = gpx_data2, color = "red", weight = 3, 
+               group = "Soltinddalen", 
+               popup = ~paste0('<a href="', urls[["Soltinddalen"]], '" target="_blank">Kjøp kart på inatur.no</a>')) %>%
+  addPolylines(data = gpx_data3, color = "red", weight = 3, 
+               group = "Gamnes Sør 1", 
+               popup = ~paste0('<a href="', urls[["Gamnes Vest 1"]], '" target="_blank">Kjøp kart på inatur.no</a>')) %>%
+  addPolylines(data = gpx_data4, color = "red", weight = 3, 
+               group = "Gamnes Sør 2", 
+               popup = ~paste0('<a href="', urls[["Gamnes Vest 2"]], '" target="_blank">Kjøp kart på inatur.no</a>')) %>%
+  addPolylines(data = gpx_data5, color = "red", weight = 3, 
+               group = "Grunnfjord Vest", 
+               popup = ~paste0('<a href="', urls[["Grunnfjord Vest"]], '" target="_blank">Kjøp kart på inatur.no</a>')) %>%
   addLayersControl(
     baseGroups = c("Satellite", "Topo Map"),
+    overlayGroups = c("Gamnes Nord", "Soltinddalen", "Gamnes Sør 1", "Gamnes Sør 2", "Grunnfjord Vest"),
     options = layersControlOptions(collapsed = FALSE)
-  ) |>
-  addPolylines(data = gpx_data, color = "blue", weight = 3) %>%
-  addPolylines(data = gpx_data2, color = "blue", weight = 3) %>%
-  addPolylines(data = gpx_data3, color = "blue", weight = 3) %>%
-  addPolylines(data = gpx_data4, color = "blue", weight = 3) %>%
-  addPolylines(data = gpx_data5, color = "blue", weight = 3) 
+  )
+
 map
+
 ```
+
+
 
 
