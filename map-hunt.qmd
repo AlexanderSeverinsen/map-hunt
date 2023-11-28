@@ -12,6 +12,7 @@ format:
 #| warning: false
 #| output: false
 
+
 library(sf)
 library(leaflet)
 library(XML)
@@ -19,6 +20,10 @@ library(dplyr)
 library(xml2)
 library(tidyverse)
 library(leaflet.extras)
+library(terra)
+
+
+source("inatur.R")
 
 # Exported GPX files from Garmin connect
 # could use tcx files to get height, altitude and heartrate
@@ -29,8 +34,6 @@ gpx_data4  <- st_read("gpx_tracks/activity_12152120927_gamnes_sør.gpx", layer="
 gpx_data5  <- st_read("gpx_tracks/activity_12172841314_grunnfjord_vest.gpx", layer="tracks") 
 
 ```
-
-
 
 
 ```{r}
@@ -69,6 +72,7 @@ map <- leaflet() %>%
   addPolylines(data = gpx_data5, color = "red", weight = 3, 
                group = "Grunnfjord Vest", 
                popup = ~paste0('<a href="', urls[["Grunnfjord Vest"]], '" target="_blank">Kjøp kart på inatur.no</a>')) %>%
+  addPolygons(data = combined_sf, color = ~ifelse(name == "Sone øst", "blue", "green"))  %>%
   addLayersControl(
     baseGroups = c("Satellite", "Topo Map"),
     overlayGroups = c("Gamnes Nord", "Soltinddalen", "Gamnes Sør 1", "Gamnes Sør 2", "Grunnfjord Vest"),
