@@ -77,14 +77,12 @@ map <- leaflet() %>%
     baseGroups = c("Satellite", "Topo Map"),
     overlayGroups = c("Gamnes Nord", "Soltinddalen", "Gamnes Sør 1", "Gamnes Sør 2", "Grunnfjord Vest"),
     options = layersControlOptions(collapsed = FALSE)
-  ) %>%  addControlGPS(
-    options = gpsOptions(
-      position = "topleft",
-      activate = TRUE, 
-      autoCenter = TRUE,
-      setView = TRUE))
+  ) %>%
+  addMeasure(primaryLengthUnit = "meters")
 
-activateGPS(map)
+??addMeasure
+
+map
 
 ```
 
