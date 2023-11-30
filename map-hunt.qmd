@@ -80,10 +80,7 @@ map <- leaflet() %>%
   ) %>%
   addMeasure(primaryLengthUnit = "meters")
 
-??addMeasure
-
 map
-
 ```
 
 
